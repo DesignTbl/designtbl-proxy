@@ -23,8 +23,12 @@ async def hello(request):
     image = requests.get(url, stream=True)
     image.raw.decode_content = True
     # we could consider caching the images by url
+    headers = dict()
+    headers["Access-Control-Allow-Origin"] = "*"
+    headers["Access-Control-Allow-Credentials"] = True
     return response.raw(
         image.raw.read(),
+        headers=headers,
         content_type=image.headers.get('Content-Type')
     )
 
