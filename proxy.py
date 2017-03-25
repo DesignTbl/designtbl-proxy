@@ -16,7 +16,7 @@ async def hello(request):
     query = parse_qs(request.query_string)
     url = query.get('src')
     if not url:
-        return response.text("OK", status_code=200)
+        return response.text("OK", status=200)
     else:
         # query params return a list of values for each key
         url = url[0]
