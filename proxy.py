@@ -18,7 +18,6 @@ async def hello(request):
     if not url:
         return response.text("OK", status=200)
     else:
-        # query params return a list of values for each key
         url = url[0]
     image = requests.get(url, stream=True)
     image.raw.decode_content = True
