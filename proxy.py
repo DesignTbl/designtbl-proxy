@@ -12,18 +12,25 @@ import shutil
 app = Sanic()
 
 @app.get('/')
-async def hello(request):
+async def cors(request):
     query = parse_qs(request.query_string)
+    origin = query.get('origin')
     url = query.get('src')
     if not url:
-        return response.text("OK", status=200)
+        # you serve a static page here
+        return response.html(open('index.html').read())
     else:
+        # query params return a list of values for each key
         url = url[0]
+    if origin:
+        origin = origin[0]
+    else:
+        origin = '*'
     image = requests.get(url, stream=True)
     image.raw.decode_content = True
     # we could consider caching the images by url
     headers = dict()
-    headers["Access-Control-Allow-Origin"] = "*"
+    headers["Access-Control-Allow-Origin"] = origin
     headers["Access-Control-Allow-Credentials"] = True
     return response.raw(
         image.raw.read(),
@@ -33,5 +40,5 @@ async def hello(request):
 
 app.run(
     host='0.0.0.0',
-    port=os.environ.get('PORT')
+    port=os.environ.get('PORT') or 8000
 )
