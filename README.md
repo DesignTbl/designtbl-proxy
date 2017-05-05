@@ -15,14 +15,11 @@ python3 proxy.py
 
 Request a URL with a `src` query parameter that points to an image, e.g.
 
-```bash
-curl localhost:8000?src=https://some-url.com/some-image.jpg # or png, etc...
-```
+http://localhost:8000?src=https://some-url.com/some-image.jpg
 
 optionally specify the `origin` parameter as well (defaults to `*`):
 
-```bash
-curl localhost:8000?origin=example.com&src=https://some-url.com/some-image.jpg
-```
+http://localhost:8000?origin=example.com&src=https://some-url.com/some-image.jpg
+
 
 
