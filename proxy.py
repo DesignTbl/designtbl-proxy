@@ -28,7 +28,6 @@ async def cors(request):
         origin = '*'
     image = requests.get(url, stream=True)
     image.raw.decode_content = True
-    # we could consider caching the images by url
     headers = dict()
     headers["Access-Control-Allow-Origin"] = origin
     headers["Access-Control-Allow-Credentials"] = True
