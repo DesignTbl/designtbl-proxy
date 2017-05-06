@@ -17,7 +17,7 @@ async def cors(request):
     origin = query.get('origin')
     url = query.get('src')
     if not url:
-        # you serve a static page here
+        # you can serve a static page here
         return response.html(open('index.html').read())
     else:
         # query params return a list of values for each key
