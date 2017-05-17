@@ -8,7 +8,9 @@ import requests
 import os
 import requests
 import shutil
+from sanic.config import Config
 
+Config.REQUEST_TIMEOUT = 10
 app = Sanic()
 
 @app.get('/')
