@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 from sanic.app import Sanic
 #from sanic.response import stream, file
-import sanic.response as response
+from sanic.response import raw, html
 from urllib.parse import parse_qs
 from sanic.log import log
 import requests
+import aiohttp
 import os
 import requests
 import shutil
 from sanic.config import Config
+import asyncio
+import async_timeout
+
+async def fetch(session, url):
+    with async_timeout.timeout(10):
+        async with session.get(url) as response:
+            return await response.read(), response.headers
 
 Config.REQUEST_TIMEOUT = 10
 app = Sanic()
@@ -20,7 +28,7 @@ async def cors(request):
     url = query.get('src')
     if not url:
         # you can serve a static page here
-        return response.html(open('index.html').read())
+        return html(open('index.html').read())
     else:
         # query params return a list of values for each key
         url = url[0]
@@ -28,15 +36,15 @@ async def cors(request):
         origin = origin[0]
     else:
         origin = '*'
-    image = requests.get(url, stream=True)
-    image.raw.decode_content = True
+    async with aiohttp.ClientSession(loop=asyncio.get_event_loop()) as session:
+        response = await fetch(session, url)
     headers = dict()
     headers["Access-Control-Allow-Origin"] = origin
     headers["Access-Control-Allow-Credentials"] = True
-    return response.raw(
-        image.raw.read(),
+    return raw(
+        response[0],
         headers=headers,
-        content_type=image.headers.get('Content-Type')
+        content_type=response[1].get('Content-Type')
     )
 
 app.run(
