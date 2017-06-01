@@ -1,2 +1,2 @@
-sanic
+sanic==0.4.1
 requests

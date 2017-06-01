@@ -41,5 +41,6 @@ async def cors(request):
 
 app.run(
     host='0.0.0.0',
-    port=os.environ.get('PORT') or 8000
+    port=os.environ.get('PORT') or 80,
+    debug=True
 )
